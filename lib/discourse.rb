@@ -1218,6 +1218,10 @@ module Discourse
   end
 
   def self.new_cache(name, max_size_per_site:, namespace: true)
-    LiveCache.new(name, max_size_per_site: max_size_per_site, namespace: namespace)
+    if GlobalSetting.use_live_caches
+      LiveCache.new(name, max_size_per_site: max_size_per_site, namespace: namespace)
+    else
+      DistributedCache.new(name, namespace: namespace)
+    end
   end
 end
